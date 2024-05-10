@@ -4,11 +4,12 @@ import com.everythingchess.shop.app.entity.Product;
 import com.everythingchess.shop.app.entity.ProductCategory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
-public class RestConfig {
+public class RestConfig implements RepositoryRestConfigurer {
 
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         HttpMethod[] theUnsupportedActions = {HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE};
@@ -26,7 +27,8 @@ public class RestConfig {
                 .withCollectionExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
 
         // call an internal helper method
-        config.exposeIdsFor(Product.class, ProductCategory.class);
+        config.exposeIdsFor(Product.class);
+        config.exposeIdsFor(ProductCategory.class);
     }
 
 }
