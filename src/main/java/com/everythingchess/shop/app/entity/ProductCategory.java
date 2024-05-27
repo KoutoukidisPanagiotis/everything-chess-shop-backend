@@ -1,15 +1,15 @@
 package com.everythingchess.shop.app.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "product_category")
-@Getter
-@Setter
+@Data
 public class ProductCategory {
 
     @Id
@@ -20,6 +20,8 @@ public class ProductCategory {
     @Column(name = "category_name")
     private String categoryName;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private Set<Product> products;
 
