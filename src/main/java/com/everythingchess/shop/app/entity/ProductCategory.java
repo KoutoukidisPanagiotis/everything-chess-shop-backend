@@ -1,15 +1,13 @@
 package com.everythingchess.shop.app.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "product_category")
-@Getter
-@Setter
+@Data
 public class ProductCategory {
 
     @Id
