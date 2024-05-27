@@ -26,4 +26,7 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    public double getTotalPrice() {
+        return quantity * unitPrice;
+    }
 }

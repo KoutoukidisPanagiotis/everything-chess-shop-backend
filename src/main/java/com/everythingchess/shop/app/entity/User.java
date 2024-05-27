@@ -2,11 +2,11 @@ package com.everythingchess.shop.app.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -40,15 +40,19 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Address> addresses;
+    private Collection<Address> addresses;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Order> orders;
+    private Collection<Order> orders;
 
     public void addAddress(Address address) {
         if (addresses == null) {
-            addresses = new ArrayList<>();
+            addresses = new HashSet<>();
         }
 
         addresses.add(address);
@@ -57,7 +61,7 @@ public class User {
 
     public void addOrder(Order order) {
         if (orders == null) {
-            orders = new ArrayList<>();
+            orders = new HashSet<>();
         }
 
         orders.add(order);

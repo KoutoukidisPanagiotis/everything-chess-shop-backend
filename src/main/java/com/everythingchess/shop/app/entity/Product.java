@@ -5,7 +5,6 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -32,7 +31,7 @@ public class Product {
     private String description;
 
     @Column(name = "unit_price")
-    private BigDecimal unitPrice;
+    private double unitPrice;
 
     @Column(name = "image_url")
     private String imageUrl;

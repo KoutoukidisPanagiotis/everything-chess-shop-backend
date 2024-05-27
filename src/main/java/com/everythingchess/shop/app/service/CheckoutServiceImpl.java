@@ -4,10 +4,10 @@ import com.everythingchess.shop.app.dto.Purchase;
 import com.everythingchess.shop.app.dto.PurchaseResponse;
 import com.everythingchess.shop.app.entity.Address;
 import com.everythingchess.shop.app.entity.Order;
-import com.everythingchess.shop.app.entity.OrderItem;
-import com.everythingchess.shop.app.entity.User;
+import com.everythingchess.shop.app.entity.Product;
 import com.everythingchess.shop.app.repository.AddressRepository;
-import com.everythingchess.shop.app.repository.UserRepository;
+import com.everythingchess.shop.app.repository.OrderRepository;
+import com.everythingchess.shop.app.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,36 +18,45 @@ import java.util.UUID;
 @Service
 public class CheckoutServiceImpl implements CheckoutService {
 
-    private UserRepository userRepository;
-    private AddressRepository addressRepository;
+    private final OrderRepository orderRepository;
+    private final AddressRepository addressRepository;
+
+    private final ProductRepository productRepository;
 
     @Autowired
-    public CheckoutServiceImpl(UserRepository userRepository, AddressRepository addressRepository) {
-        this.userRepository = userRepository;
+    public CheckoutServiceImpl(OrderRepository orderRepository, AddressRepository addressRepository, ProductRepository productRepository) {
+        this.orderRepository = orderRepository;
         this.addressRepository = addressRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
     @Transactional
     public PurchaseResponse placeOrder(Purchase purchase) {
-        Order order = purchase.getOrder();
+        List<Product> products = productRepository.findAllById(purchase.getOrder().getOrderItems().stream().map(orderItem -> orderItem.getProduct().getId()).toList());
 
+        purchase.getOrder().getOrderItems().forEach(orderItem -> {
+            products.forEach(product -> {
+                if (product.getId().equals(orderItem.getProduct().getId())) {
+                    orderItem.setUnitPrice(product.getUnitPrice());
+                }
+            });
+        });
+
+        Address address = addressRepository.save(purchase.getOrder().getAddress());
+        Order order = new Order();
+        order.setUser(purchase.getOrder().getUser());
+        order.setAddress(address);
+        order.setTotalPrice(purchase.getOrder().getTotalOrderPrice());
+        order.setOrderStatus("PROCESSING");
         String orderTrackingNumber = generateOrderTrackingNumber();
         order.setTrackingNumber(orderTrackingNumber);
 
-        List<OrderItem> orderItems = purchase.getOrderItems();
-        orderItems.forEach(order::addOrderItem);
+        purchase.getOrder().getOrderItems().forEach(
+                order::addOrderItem
+        );
 
-        User user = purchase.getUser();
-        userRepository.save(user); // Save the User before setting it to the Address
-
-        Address address = purchase.getAddress();
-        address.setUser(user); // Set the user property of the Address
-        addressRepository.save(address); // Save the Address
-
-        order.setUser(user); // Set the user property of the Order
-        order.setAddress(address); // Set the address property of the Order
-        userRepository.save(user); // Update the User with the new Order
+        orderRepository.save(order);
 
         return new PurchaseResponse(orderTrackingNumber);
     }

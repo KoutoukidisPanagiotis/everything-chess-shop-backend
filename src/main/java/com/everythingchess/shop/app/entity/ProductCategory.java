@@ -2,6 +2,8 @@ package com.everythingchess.shop.app.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Set;
 
@@ -18,6 +20,8 @@ public class ProductCategory {
     @Column(name = "category_name")
     private String categoryName;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private Set<Product> products;
 

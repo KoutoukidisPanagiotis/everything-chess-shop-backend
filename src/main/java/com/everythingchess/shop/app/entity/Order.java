@@ -1,8 +1,9 @@
 package com.everythingchess.shop.app.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.ArrayList;
@@ -11,8 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "`order`")
-@Getter
-@Setter
+@Data
 public class Order {
 
     @Id
@@ -40,6 +40,8 @@ public class Order {
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
@@ -52,4 +54,11 @@ public class Order {
         orderItem.setOrder(this);
     }
 
+    public double getTotalOrderPrice() {
+        double sum = orderItems.stream()
+                .mapToDouble(OrderItem::getTotalPrice)
+                .sum();
+
+        return sum;
+    }
 }
