@@ -5,5 +5,5 @@ import com.everythingchess.shop.app.dto.PurchaseResponse;
 
 public interface CheckoutService {
 
-    PurchaseResponse placeOrder(Purchase purchase);
+    PurchaseResponse placeOrder(String email, Purchase purchase);
 }
