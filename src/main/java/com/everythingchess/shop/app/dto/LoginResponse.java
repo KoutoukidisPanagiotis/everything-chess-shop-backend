@@ -1,7 +1,6 @@
 package com.everythingchess.shop.app.dto;
 
 public class LoginResponse {
-
     private String token;
     private long expiresIn;
 

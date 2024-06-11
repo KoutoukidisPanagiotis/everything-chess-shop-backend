@@ -2,12 +2,9 @@ package com.everythingchess.shop.app.controller;
 
 import com.everythingchess.shop.app.dto.OrderDto;
 import com.everythingchess.shop.app.entity.Order;
-import com.everythingchess.shop.app.repository.OrderRepository;
 import com.everythingchess.shop.app.service.JwtService;
+import com.everythingchess.shop.app.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,14 +14,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin("http://localhost:4200")
 public class OrderController {
-    private final OrderRepository orderRepository;
+    private final OrderService orderService;
     private final JwtService jwtService;
-    private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
-    public OrderController(OrderRepository orderRepository, JwtService jwtService) {
-        this.orderRepository = orderRepository;
+    public OrderController(OrderService orderService, JwtService jwtService) {
+        this.orderService = orderService;
         this.jwtService = jwtService;
     }
 
@@ -33,8 +28,7 @@ public class OrderController {
         String authHeader = request.getHeader("Authorization");
         String jwt = authHeader.substring(7);
         String userEmail = jwtService.extractUsername(jwt);
-        LOGGER.info ("Fetching orders for user: " + userEmail);
-        List<Order> orders = orderRepository.findByUserEmail(userEmail);
+        List<Order> orders = orderService.getOrdersForCurrentUser(userEmail);
 
         return orders.stream()
                 .map(this::mapFromOrderToDto)
@@ -43,7 +37,7 @@ public class OrderController {
 
     @GetMapping("/admin-orders")
     public List<OrderDto> getOrdersForAdmin() {
-        List<Order> orders = orderRepository.findAll();
+        List<Order> orders = orderService.getOrdersForAdmin();
 
         return orders.stream()
                 .map(this::mapFromOrderToDto)

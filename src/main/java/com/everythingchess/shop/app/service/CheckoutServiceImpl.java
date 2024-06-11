@@ -19,7 +19,6 @@ import java.util.UUID;
 
 @Service
 public class CheckoutServiceImpl implements CheckoutService {
-
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final AddressRepository addressRepository;
@@ -40,7 +39,6 @@ public class CheckoutServiceImpl implements CheckoutService {
         purchase.getOrder().setUser(user);
         purchase.getOrder().getAddress().setUser(user);
         List<Product> products = fetchProducts(purchase);
-
         setUnitPriceForOrderItems(purchase, products);
         Address address = addressRepository.save(purchase.getOrder().getAddress());
         Order order = createOrder(purchase, address);

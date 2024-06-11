@@ -12,7 +12,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDto {
-
     private String orderTrackingNumber;
     private Date dateCreated;
     private double totalPrice;

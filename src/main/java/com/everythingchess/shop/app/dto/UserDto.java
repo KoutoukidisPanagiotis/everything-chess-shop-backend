@@ -10,7 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-    // Getters and setters
     private String email;
     private String password;
     private String firstName;

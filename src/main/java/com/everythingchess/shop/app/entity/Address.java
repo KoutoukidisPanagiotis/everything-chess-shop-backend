@@ -7,7 +7,6 @@ import lombok.Data;
 @Table(name = "address")
 @Data
 public class Address {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

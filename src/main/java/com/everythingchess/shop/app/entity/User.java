@@ -14,7 +14,6 @@ import java.util.*;
 @Table(name = "user")
 @Data
 public class User implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

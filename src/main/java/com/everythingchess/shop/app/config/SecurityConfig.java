@@ -47,15 +47,14 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                    .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "api/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/product-category/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/checkout/purchase").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/checkout/purchase").hasAnyRole("ADMIN", "CUSTOMER")
                         .requestMatchers(HttpMethod.GET, "api/orders").hasAnyRole("ADMIN", "CUSTOMER")
                         .requestMatchers(HttpMethod.GET, "api/admin-orders").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/jwt/inspect").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .anyRequest().denyAll())
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

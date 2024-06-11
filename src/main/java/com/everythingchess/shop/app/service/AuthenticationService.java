@@ -10,6 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AuthenticationService {
     private final UserRepository userRepository;
@@ -30,10 +32,15 @@ public class AuthenticationService {
     }
 
     public User register(UserDto userDto) {
+        Optional<User> existingUser = userRepository.findByEmail(userDto.getEmail());
+
+        if (existingUser.isPresent()) {
+            throw new IllegalArgumentException("Email already in use.");
+        }
+
         User user = new User();
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-
         user.setRole(roleRepository.findByRoleName("CUSTOMER"));
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
@@ -41,15 +48,15 @@ public class AuthenticationService {
         return userRepository.save(user);
     }
 
-    public User authenticate(LoginDto input) {
+    public User authenticate(LoginDto loginDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        input.getEmail(),
-                        input.getPassword()
+                        loginDto.getEmail(),
+                        loginDto.getPassword()
                 )
         );
 
-        return userRepository.findByEmail(input.getEmail())
+        return userRepository.findByEmail(loginDto.getEmail())
                 .orElseThrow();
     }
 }
