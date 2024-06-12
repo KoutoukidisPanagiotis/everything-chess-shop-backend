@@ -23,4 +23,22 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getOrdersForAdmin() {
         return orderRepository.findAll();
     }
+
+    @Override
+    public Order getOrderByTrackingNumber(String trackingNumber) {
+        return orderRepository.findByTrackingNumber(trackingNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found with tracking number: " + trackingNumber));
+    }
+
+    @Override
+    public Order saveOrder(Order order) {
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public Order updateOrderStatus(String trackingNumber, String newStatus) {
+        Order order = getOrderByTrackingNumber(trackingNumber);
+        order.setOrderStatus(newStatus);
+        return orderRepository.save(order);
+    }
 }

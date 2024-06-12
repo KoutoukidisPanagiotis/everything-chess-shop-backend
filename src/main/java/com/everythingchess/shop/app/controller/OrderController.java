@@ -5,9 +5,7 @@ import com.everythingchess.shop.app.entity.Order;
 import com.everythingchess.shop.app.service.JwtService;
 import com.everythingchess.shop.app.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +40,12 @@ public class OrderController {
         return orders.stream()
                 .map(this::mapFromOrderToDto)
                 .collect(Collectors.toList());
+    }
+
+    @PatchMapping("/admin-orders/{trackingNumber}")
+    public OrderDto updateOrderStatus(@PathVariable String trackingNumber, @RequestBody String newStatus) {
+        Order updatedOrder = orderService.updateOrderStatus(trackingNumber, newStatus);
+        return mapFromOrderToDto(updatedOrder);
     }
 
     private OrderDto mapFromOrderToDto(Order order) {
