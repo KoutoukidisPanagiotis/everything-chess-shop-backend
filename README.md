@@ -36,6 +36,6 @@ This is a demo project for a Spring Boot application. It's an online shop applic
 
 ## Related Projects
 
-This backend application is designed to work with a front-end application, which is located in another repository. You can find the front-end application here: [Front-end Repository](https://github.com/yourusername/frontend-repo)
+This backend application is designed to work with a front-end application, which is located in another repository. You can find the front-end application here: https://github.com/KoutoukidisPanagiotis/everything-chess-shop-frontend
 
 Please follow the instructions in the front-end repository to set it up and run it alongside this backend application.
