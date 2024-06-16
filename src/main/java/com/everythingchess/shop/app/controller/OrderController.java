@@ -4,6 +4,8 @@ import com.everythingchess.shop.app.dto.OrderDto;
 import com.everythingchess.shop.app.entity.Order;
 import com.everythingchess.shop.app.service.JwtService;
 import com.everythingchess.shop.app.service.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,9 @@ public class OrderController {
         this.jwtService = jwtService;
     }
 
+    @Operation(summary = "Get orders for current user")
+    @ApiResponse(responseCode = "200", description = "Orders retrieved successfully")
+    @ApiResponse(responseCode = "403", description = "Invalid credentials")
     @GetMapping("/orders")
     public List<OrderDto> getOrdersForCurrentUser(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
@@ -33,6 +38,9 @@ public class OrderController {
                 .collect(Collectors.toList());
     }
 
+    @Operation(summary = "Get orders for admin")
+    @ApiResponse(responseCode = "200", description = "Orders retrieved successfully")
+    @ApiResponse(responseCode = "403", description = "Invalid credentials")
     @GetMapping("/admin-orders")
     public List<OrderDto> getOrdersForAdmin() {
         List<Order> orders = orderService.getOrdersForAdmin();
@@ -42,6 +50,9 @@ public class OrderController {
                 .collect(Collectors.toList());
     }
 
+    @Operation(summary = "Update order status")
+    @ApiResponse(responseCode = "200", description = "Order status updated successfully")
+    @ApiResponse(responseCode = "403", description = "Invalid credentials")
     @PatchMapping("/admin-orders/{trackingNumber}")
     public OrderDto updateOrderStatus(@PathVariable String trackingNumber, @RequestBody String newStatus) {
         Order updatedOrder = orderService.updateOrderStatus(trackingNumber, newStatus);

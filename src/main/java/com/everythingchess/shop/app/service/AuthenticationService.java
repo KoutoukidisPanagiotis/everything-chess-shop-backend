@@ -17,7 +17,6 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationService(

@@ -33,6 +33,19 @@ This is a demo project for a Spring Boot application. It's an online shop applic
 3. Build the project with Maven
 4. Run the application.
 
+## Initial Users
+
+The application comes with two initial users:
+
+1. Admin User:
+    - Email: admin@admin.com
+    - Password: admin
+
+2. Customer User:
+    - Email: customer@customer.com
+    - Password: customer
+
+You can use these credentials to log in to the application and test its functionality.
 
 ## Related Projects
 

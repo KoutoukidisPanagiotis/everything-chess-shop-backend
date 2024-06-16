@@ -1,5 +1,6 @@
 package com.everythingchess.shop.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,6 +22,7 @@ public class ProductCategory {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private Set<Product> products;
 

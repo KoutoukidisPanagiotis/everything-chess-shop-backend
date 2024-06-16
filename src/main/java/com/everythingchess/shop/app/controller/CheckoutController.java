@@ -4,6 +4,8 @@ import com.everythingchess.shop.app.dto.Purchase;
 import com.everythingchess.shop.app.dto.PurchaseResponse;
 import com.everythingchess.shop.app.service.CheckoutService;
 import com.everythingchess.shop.app.service.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,9 @@ public class CheckoutController {
         this.jwtService = jwtService;
     }
 
+    @Operation(summary = "Place an order")
+    @ApiResponse(responseCode = "200", description = "Order placed successfully")
+    @ApiResponse(responseCode = "403", description = "Invalid credentials")
     @PostMapping("/purchase")
     public PurchaseResponse placeOrder(@RequestBody Purchase purchase, HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
